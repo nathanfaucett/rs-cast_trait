@@ -1,0 +1,20 @@
+[package]
+name = "cast_trait"
+version = "0.1.0"
+authors = ["Nathan Faucett <nathanfaucett@gmail.com>"]
+
+keywords = ["cast", "trait", "as"]
+categories = []
+
+description = "cast trait"
+license = "MIT"
+readme = "README.md"
+repository = "https://gitlab.com/nathanfaucett/rs-cast_trait.git"
+homepage = "https://gitlab.com/nathanfaucett/rs-cast_trait"
+
+[lib]
+name = "cast_trait"
+path = "src/lib.rs"
+
+[dependencies]
+[dev-dependencies]
