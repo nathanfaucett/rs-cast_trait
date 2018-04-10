@@ -1,7 +1,5 @@
 # rs-cast_trait
 
-=====
-
 cast trait
 
 ```rust
