@@ -20,14 +20,14 @@ pub trait Cast<T> {
 }
 
 macro_rules! impl_cast {
-    ($F:ty, $($T:ty),*) => (
-        $(impl Cast<$T> for $F {
+    ($F:ty, $($T:ty),*) => ($(
+        impl Cast<$T> for $F {
             #[inline(always)]
             fn cast(self) -> $T {
                 self as $T
             }
-        })*
-    );
+        }
+    )*);
 }
 
 macro_rules! impl_cast_primitive {
@@ -35,13 +35,20 @@ macro_rules! impl_cast_primitive {
         $(
             impl_cast!(
                 $F,
-                i8, i16, i32, i64, i128, isize, u8, u16, u32, u64, u128, usize, f32, f64
+                i8, i16, i32, i64, isize, u8, u16, u32, u64, usize, f32, f64
+            );
+            #[cfg(feature = "nightly")]
+            impl_cast!(
+                $F,
+                i128, u128
             );
         )*
     );
 }
 
 impl_cast_primitive!(i8, i16, i32, i64, isize, u8, u16, u32, u64, usize, f32, f64);
+
+#[cfg(feature = "nightly")]
 impl_cast_primitive!(i128, u128);
 
 macro_rules! impl_cast_bool {
@@ -80,8 +87,10 @@ macro_rules! impl_cast_bool {
 }
 
 impl_cast_bool!(int, i8, i16, i32, i64, isize, u8, u16, u32, u64, usize);
-impl_cast_bool!(int, i128, u128);
 impl_cast_bool!(float, f32, f64);
+
+#[cfg(feature = "nightly")]
+impl_cast_bool!(int, i128, u128);
 
 impl<A, B> Cast<Wrapping<B>> for Wrapping<A>
 where
@@ -143,39 +152,9 @@ macro_rules! impl_cast_slices {
     );
 }
 
+#[cfg_attr(rustfmt, rustfmt_skip)]
 impl_cast_slices!(
-    31,
-    30,
-    29,
-    28,
-    27,
-    26,
-    25,
-    24,
-    23,
-    22,
-    21,
-    20,
-    19,
-    18,
-    17,
-    16,
-    15,
-    14,
-    13,
-    12,
-    11,
-    10,
-    9,
-    8,
-    7,
-    6,
-    5,
-    4,
-    3,
-    2,
-    1,
-    0
+    31, 30, 29, 28, 27, 26, 25, 24, 23, 22, 21, 20, 19, 18, 17, 16, 15, 14, 13, 12, 11, 10, 9, 8, 7, 6, 5, 4, 3, 2, 1, 0
 );
 
 #[test]
@@ -194,4 +173,15 @@ fn test_cast_slice() {
 
     let z: [f32; 32] = x.cast();
     assert_eq!(z, y);
+}
+
+#[cfg(feature = "nightly")]
+#[test]
+fn test_i128_u128() {
+    let x: i128 = 1;
+    let y: u128 = x.cast();
+    let z: f32 = y.cast();
+    assert_eq!(x, 1_i128);
+    assert_eq!(y, 1_u128);
+    assert_eq!(z, 1_f32);
 }
