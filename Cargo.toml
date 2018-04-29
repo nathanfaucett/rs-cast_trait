@@ -1,6 +1,6 @@
 [package]
 name = "cast_trait"
-version = "0.1.1"
+version = "0.1.2"
 authors = ["Nathan Faucett <nathanfaucett@gmail.com>"]
 
 keywords = ["cast", "trait", "as"]
@@ -18,6 +18,3 @@ path = "src/lib.rs"
 
 [dependencies]
 [dev-dependencies]
-
-[features]
-nightly = []
